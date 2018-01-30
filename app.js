@@ -89,16 +89,13 @@ function request ({
 }
 
 function getTimings (eventTimes) {
-  return
-    // There is no DNS lookup with IP address
-    eventTimes.dnsLookupAt !== undefined ?
-      getHrTimeDurationInMs(eventTimes.startAt, eventTimes.dnsLookupAt) : undefined + ',' +
-    tcpConnection: getHrTimeDurationInMs(eventTimes.dnsLookupAt || eventTimes.startAt, eventTimes.tcpConnectionAt)+ ',' +
-    tlsHandshake: eventTimes.tlsHandshakeAt !== undefined ?
-      (getHrTimeDurationInMs(eventTimes.tcpConnectionAt, eventTimes.tlsHandshakeAt)) : undefined+ ',' +
-    firstByte: getHrTimeDurationInMs((eventTimes.tlsHandshakeAt || eventTimes.tcpConnectionAt), eventTimes.firstByteAt)+ ',' +
-    contentTransfer: getHrTimeDurationInMs(eventTimes.firstByteAt, eventTimes.endAt)+ ',' +
-    total: getHrTimeDurationInMs(eventTimes.startAt, eventTimes.endAt)
+  var dnsLookup = eventTimes.dnsLookupAt !== undefined ? getHrTimeDurationInMs(eventTimes.startAt, eventTimes.dnsLookupAt) : undefined;
+  var tcpConnection = getHrTimeDurationInMs(eventTimes.dnsLookupAt || eventTimes.startAt, eventTimes.tcpConnectionAt);
+  var tlsHandshake =eventTimes.tlsHandshakeAt !== undefined ? (getHrTimeDurationInMs(eventTimes.tcpConnectionAt, eventTimes.tlsHandshakeAt)) : undefined;
+  var firstByte = getHrTimeDurationInMs((eventTimes.tlsHandshakeAt || eventTimes.tcpConnectionAt), eventTimes.firstByteAt);
+  var contentTransfer = getHrTimeDurationInMs(eventTimes.firstByteAt, eventTimes.endAt);
+  var total = getHrTimeDurationInMs(eventTimes.startAt, eventTimes.endAt);
+  return dnsLookup + ',' + tcpConnection + ',' + tlsHandshake + ',' + firstByte + ',' + contentTransfer + ',' + total;
 }
 
 function getHrTimeDurationInMs (startTime, endTime) {
