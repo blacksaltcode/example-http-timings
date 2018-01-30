@@ -106,10 +106,10 @@ function getHrTimeDurationInMs (startTime, endTime) {
   return diffInNanoSecond / MS_PER_NS
 }
 
-function doTiming(url, count) {
+function doTiming(myurl, count) {
   console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
   if (count >  0){
-    request(Object.assign(url.parse(url), {
+    request(Object.assign(url.parse(myurl), {
       headers: {
         'User-Agent': 'Example'
       }
