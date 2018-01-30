@@ -107,7 +107,6 @@ function getHrTimeDurationInMs (startTime, endTime) {
 }
 
 function doTiming(myurl, count) {
-  console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
   if (count >  0){
     request(Object.assign(url.parse(myurl), {
       headers: {
@@ -119,3 +118,4 @@ function doTiming(myurl, count) {
     })
   }
 }
+console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
