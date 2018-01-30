@@ -106,17 +106,16 @@ function getHrTimeDurationInMs (startTime, endTime) {
   return diffInNanoSecond / MS_PER_NS
 }
 
-function doTiming() {
-  request(Object.assign(url.parse('https://api.github.com'), {
-    headers: {
-      'User-Agent': 'Example'
-    }
-  }), (err, res) => {
-    console.log(err || res.timings)
-  })
+function doTiming(url, count) {
+  console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
+  if (count >  0){
+    request(Object.assign(url.parse(url), {
+      headers: {
+        'User-Agent': 'Example'
+      }
+    }), (err, res) => {
+      console.log(err || res.timings)
+      doTiming(url, count-1)
+    })
+  }
 }
-
-console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
-for (i = 0; i < 100; i++) {
-  doTiming()
-} 
