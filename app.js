@@ -116,7 +116,7 @@ function doTiming() {
   })
 }
 
-console.log('dnsLookup','tcpConnection','tlsHandshake','firstByte','contentTransfer','total')
+console.log('dnsLookup,tcpConnection,tlsHandshake,firstByte,contentTransfer,total')
 for (i = 0; i < 100; i++) {
   doTiming()
 } 
