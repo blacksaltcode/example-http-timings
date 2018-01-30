@@ -115,7 +115,7 @@ function doTiming(myurl, count) {
       }
     }), (err, res) => {
       console.log(err || res.timings)
-      doTiming(url, count-1)
+      doTiming(myurl, count-1)
     })
   }
 }
