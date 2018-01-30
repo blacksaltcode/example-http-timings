@@ -122,18 +122,16 @@ function request ({
 * @return {Object} timings - { dnsLookup, tcpConnection, tlsHandshake, firstByte, contentTransfer, total }
 */
 function getTimings (eventTimes) {
-  return {
+  return
     // There is no DNS lookup with IP address
-    dnsLookup: eventTimes.dnsLookupAt !== undefined ?
-      getHrTimeDurationInMs(eventTimes.startAt, eventTimes.dnsLookupAt) : undefined,
-    tcpConnection: getHrTimeDurationInMs(eventTimes.dnsLookupAt || eventTimes.startAt, eventTimes.tcpConnectionAt),
-    // There is no TLS handshake without https
+    eventTimes.dnsLookupAt !== undefined ?
+      getHrTimeDurationInMs(eventTimes.startAt, eventTimes.dnsLookupAt) : undefined + ',' +
+    tcpConnection: getHrTimeDurationInMs(eventTimes.dnsLookupAt || eventTimes.startAt, eventTimes.tcpConnectionAt)+ ',' +
     tlsHandshake: eventTimes.tlsHandshakeAt !== undefined ?
-      (getHrTimeDurationInMs(eventTimes.tcpConnectionAt, eventTimes.tlsHandshakeAt)) : undefined,
-    firstByte: getHrTimeDurationInMs((eventTimes.tlsHandshakeAt || eventTimes.tcpConnectionAt), eventTimes.firstByteAt),
-    contentTransfer: getHrTimeDurationInMs(eventTimes.firstByteAt, eventTimes.endAt),
+      (getHrTimeDurationInMs(eventTimes.tcpConnectionAt, eventTimes.tlsHandshakeAt)) : undefined+ ',' +
+    firstByte: getHrTimeDurationInMs((eventTimes.tlsHandshakeAt || eventTimes.tcpConnectionAt), eventTimes.firstByteAt)+ ',' +
+    contentTransfer: getHrTimeDurationInMs(eventTimes.firstByteAt, eventTimes.endAt)+ ',' +
     total: getHrTimeDurationInMs(eventTimes.startAt, eventTimes.endAt)
-  }
 }
 
 /**
@@ -151,11 +149,17 @@ function getHrTimeDurationInMs (startTime, endTime) {
   return diffInNanoSecond / MS_PER_NS
 }
 
-// Getting timings
-request(Object.assign(url.parse('https://api.github.com'), {
-  headers: {
-    'User-Agent': 'Example'
-  }
-}), (err, res) => {
-  console.log(err || res.timings)
-})
+function doTiming() {
+  request(Object.assign(url.parse('https://api.github.com'), {
+    headers: {
+      'User-Agent': 'Example'
+    }
+  }), (err, res) => {
+    console.log(err || res.timings)
+  })
+}
+
+console.log('dnsLookup','tcpConnection','tlsHandshake','firstByte','contentTransfer','total')
+for (i = 0; i < 100; i++) {
+  doTiming()
+} 
